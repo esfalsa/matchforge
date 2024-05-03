@@ -1,4 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
+import { Link } from "@remix-run/react";
+import { Button } from "~/components/ui/button";
 
 export const meta: MetaFunction = () => {
   return [
@@ -9,20 +11,17 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   return (
-    <div>
-      <h1 className="text-3xl font-bold">Welcome to Remix (SPA Mode)</h1>
+    <main className="flex h-full flex-col items-center justify-center">
+      <h1 className="mb-4 text-3xl font-bold">
+        Match<span className="text-green-500">Forge</span>
+      </h1>
       <ul>
         <li>
-          <a target="_blank" href="https://remix.run/guides/spa-mode" rel="noreferrer">
-            SPA Mode Guide
-          </a>
-        </li>
-        <li>
-          <a target="_blank" href="https://remix.run/docs" rel="noreferrer">
-            Remix Docs
-          </a>
+          <Button className="w-64" asChild>
+            <Link to="/match">Simulate Match</Link>
+          </Button>
         </li>
       </ul>
-    </div>
+    </main>
   );
 }

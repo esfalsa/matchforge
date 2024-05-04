@@ -6,12 +6,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormDescription,
 } from "~/components/ui/form";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { randomSeed } from "~/lib/seed";
 
 const FormSchema = z.object({
   home: z.object({
@@ -46,8 +48,11 @@ export default function Match() {
         // @ts-expect-error def is a number, but empty string ensures field starts empty
         def: "",
       },
+      seed: randomSeed(),
     },
   });
+  const home = form.watch("home");
+  const away = form.watch("away");
 
   const submit = useSubmit();
 
@@ -89,47 +94,55 @@ export default function Match() {
               </FormItem>
             )}
           />
-          <div className="flex space-x-4">
-            <FormField
-              control={form.control}
-              name="home.att"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Home Team Attack Rating</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="2.4"
-                      type="number"
-                      inputMode="decimal"
-                      step={0.1}
-                      required
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="home.def"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Home Team Defense Rating</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="0.4"
-                      type="number"
-                      inputMode="decimal"
-                      step={0.1}
-                      required
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <div>
+            <div className="flex space-x-4">
+              <FormField
+                control={form.control}
+                name="home.att"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Home Team Attack Rating</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="2.4"
+                        type="number"
+                        inputMode="decimal"
+                        step={0.1}
+                        required
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="home.def"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Home Team Defense Rating</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="0.4"
+                        type="number"
+                        inputMode="decimal"
+                        step={0.1}
+                        required
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <FormDescription className="mt-2">
+              Power Index:{" "}
+              {home.def && home.att ?
+                (100 / (1 + 1.2 * Math.exp(home.def - home.att))).toFixed(2)
+              : "N/A"}
+            </FormDescription>
           </div>
           <FormField
             control={form.control}
@@ -144,47 +157,55 @@ export default function Match() {
               </FormItem>
             )}
           />
-          <div className="flex space-x-4">
-            <FormField
-              control={form.control}
-              name="away.att"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Away Team Attack Rating</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="2.6"
-                      type="number"
-                      inputMode="decimal"
-                      step={0.1}
-                      required
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="away.def"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Away Team Defense Rating</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="0.6"
-                      type="number"
-                      inputMode="decimal"
-                      step={0.1}
-                      required
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <div>
+            <div className="flex space-x-4">
+              <FormField
+                control={form.control}
+                name="away.att"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Away Team Attack Rating</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="2.6"
+                        type="number"
+                        inputMode="decimal"
+                        step={0.1}
+                        required
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="away.def"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Away Team Defense Rating</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="0.6"
+                        type="number"
+                        inputMode="decimal"
+                        step={0.1}
+                        required
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <FormDescription className="mt-2">
+              Power Index:{" "}
+              {away.def && away.att ?
+                (100 / (1 + 1.2 * Math.exp(away.def - away.att))).toFixed(2)
+              : "N/A"}
+            </FormDescription>
           </div>
           <FormField
             control={form.control}

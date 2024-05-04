@@ -12,7 +12,6 @@ type MatchInput = {
     def: number;
   };
   seed: string;
-  datetime: Date;
   [_other: string | number | symbol]: unknown;
 };
 

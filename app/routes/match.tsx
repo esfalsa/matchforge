@@ -1,4 +1,4 @@
-import { Form, useSubmit } from "@remix-run/react";
+import { Form, useSearchParams, useSubmit } from "@remix-run/react";
 import {
   Form as FormProvider,
   FormControl,
@@ -8,9 +8,9 @@ import {
   FormMessage,
   FormDescription,
 } from "~/components/ui/form";
+import { z } from "zod";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { randomSeed } from "~/lib/seed";
@@ -30,25 +30,27 @@ const FormSchema = z.object({
 });
 
 export default function Match() {
+  const [searchParams] = useSearchParams();
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
 
     defaultValues: {
       home: {
-        name: "",
+        name: searchParams.get("home.name") || "",
         // @ts-expect-error att is a number, but empty string ensures field starts empty
-        att: "",
+        att: searchParams.has("home.att") ? Number(searchParams.get("home.att")) : "",
         // @ts-expect-error def is a number, but empty string ensures field starts empty
-        def: "",
+        def: searchParams.has("home.def") ? Number(searchParams.get("home.def")) : "",
       },
       away: {
-        name: "",
+        name: searchParams.get("away.name") || "",
         // @ts-expect-error att is a number, but empty string ensures field starts empty
-        att: "",
+        att: searchParams.has("away.att") ? Number(searchParams.get("away.att")) : "",
         // @ts-expect-error def is a number, but empty string ensures field starts empty
-        def: "",
+        def: searchParams.has("away.def") ? Number(searchParams.get("away.def")) : "",
       },
-      seed: randomSeed(),
+      seed: searchParams.get("seed") || randomSeed(),
     },
   });
   const home = form.watch("home");

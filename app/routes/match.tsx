@@ -76,12 +76,12 @@ export default function Match() {
   }
 
   return (
-    <main className="flex h-full flex-col items-center justify-center">
+    <main className="flex h-full flex-col items-center justify-center px-8">
       <FormProvider {...form}>
         <Form
           action="/match/simulate"
           onSubmit={form.handleSubmit(onSubmit)}
-          className="w-96 space-y-6"
+          className="max-w-96 space-y-6"
         >
           <FormField
             control={form.control}
@@ -215,9 +215,25 @@ export default function Match() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Seed</FormLabel>
-                <FormControl>
-                  <Input placeholder="123" type="text" required {...field} />
-                </FormControl>
+                <div className="flex flex-row justify-between space-x-2">
+                  <FormControl>
+                    <Input
+                      placeholder="2dc291d095f9bc5e0a45e93899faf93c13fe5c30"
+                      type="text"
+                      required
+                      {...field}
+                    />
+                  </FormControl>
+                  <Button
+                    variant="outline"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      form.setValue("seed", randomSeed());
+                    }}
+                  >
+                    Random
+                  </Button>
+                </div>
                 <FormMessage />
               </FormItem>
             )}

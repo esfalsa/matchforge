@@ -53,20 +53,21 @@ export class Match {
 
   static simulateTeam(baseXG: number, alea: Alea) {
     const xG = alea.normal(baseXG, 0.2);
-    const goals = alea.poisson(xG);
-    const shots = Math.max(goals, alea.poisson(xG * 9.55));
-    const shotsOnGoal = Math.max(goals, alea.poisson(xG * 2.85));
+    const goals = alea.poisson(baseXG);
+    const shots = Math.max(goals, alea.poisson(baseXG * 9.6));
+    const shotsOnGoal = Math.max(goals, alea.poisson(baseXG * 3.4));
     const firstHalfAddedTime = alea.normal(3, 1);
     const secondHalfAddedTime = alea.normal(5, 1.5);
 
     const goalMinutes = alea
       .uniqueIntegers(goals, 1, 90 + firstHalfAddedTime + secondHalfAddedTime)
+      .sort()
       .map((minute) => {
         if (minute <= 45) {
           return `${minute}’`;
         } else if (minute <= 45 + firstHalfAddedTime) {
           return `45+${minute - 45}’`;
-        } else if (minute <= 90) {
+        } else if (minute <= 90 + firstHalfAddedTime) {
           return `${minute}’`;
         } else {
           return `90+${minute - 90}’`;

@@ -6,6 +6,7 @@ import {
   type ClientLoaderFunctionArgs,
 } from "@remix-run/react";
 import { z } from "zod";
+import { MatchStats } from "~/components/MatchStats";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "~/components/ui/card";
 import { Match } from "~/lib/match";
@@ -57,43 +58,27 @@ export default function MatchSimulate() {
           <CardTitle>Match Simulation</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex w-full flex-row items-center space-x-4">
+          <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] gap-x-4">
+            {/* row 1 */}
             <div className="flex-1 text-right">{match.home.name}</div>
             <div className="flex-0 text-center text-lg font-bold">
               {match.home.goals}–{match.away.goals}
             </div>
             <div className="flex-1 text-left">{match.away.name}</div>
+            {/* row 2 */}
+            <div className="flex-1 text-right text-sm text-gray-500 dark:text-gray-400">
+              {match.home.goalMinutes.join(", ")}
+            </div>
+            <div className="flex-0 text-center text-lg font-bold"></div>
+            <div className="flex-1 text-left text-sm text-gray-500 dark:text-gray-400">
+              {match.away.goalMinutes.join(", ")}
+            </div>
           </div>
-
           <p className="my-4 text-center text-xs font-medium uppercase text-gray-500 dark:text-gray-400">
             Full Time
           </p>
 
-          <div className="mt-4 flex w-full flex-row items-center space-x-4">
-            <div className="flex-1 text-right">{match.home.xG.toFixed(2)}</div>
-            <div className="flex-0 w-28 text-center text-sm text-gray-700 dark:text-gray-400">
-              Expected Goals
-            </div>
-            <div className="flex-1 text-left">{match.away.xG.toFixed(2)}</div>
-          </div>
-          <div className="mt-1 flex flex-row space-x-2">
-            <div className="h-1 flex-1 overflow-hidden rounded-full bg-gray-300 dark:bg-gray-600">
-              <div
-                className="ml-auto h-1 bg-green-500"
-                style={{
-                  width: `${(match.home.xG * 100) / (match.home.xG + match.away.xG)}%`,
-                }}
-              />
-            </div>
-            <div className="h-1 flex-1 overflow-hidden rounded-full bg-gray-300 dark:bg-gray-600">
-              <div
-                className="mr-auto h-1 bg-green-500"
-                style={{
-                  width: `${(match.away.xG * 100) / (match.home.xG + match.away.xG)}%`,
-                }}
-              />
-            </div>
-          </div>
+          <MatchStats match={match} />
         </CardContent>
         <hr className="mb-6 mt-2" />
         <CardFooter>

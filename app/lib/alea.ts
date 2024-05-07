@@ -122,6 +122,28 @@ export class Alea {
 
     return sigma * Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2) + mu;
   }
+
+  /**
+   * Returns an array of unique integers drawn from an uniform distribution, optionally within a given range.
+   *
+   * To avoid poor performance, the desired count should be significantly smaller than the range of integers.
+   *
+   * @param count the number of unique integers to generate
+   * @param min the minimum value of the integers
+   * @param max the maximum value of the integers
+   */
+  uniqueIntegers(count: number, min: number = 0, max: number = 100) {
+    const uniqueIntegers = new Set<number>();
+    min = Math.ceil(min);
+    max = Math.floor(max);
+
+    while (uniqueIntegers.size < count) {
+      const integer = Math.floor(this.random() * (max - min + 1) + min);
+      uniqueIntegers.add(integer);
+    }
+
+    return Array.from(uniqueIntegers);
+  }
 }
 
 class Mash {

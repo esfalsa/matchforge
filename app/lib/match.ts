@@ -1,6 +1,6 @@
 import { Alea } from "~/lib/alea";
 
-type MatchInput = {
+export type MatchInput = {
   home: {
     name: string;
     att: number;
@@ -23,6 +23,10 @@ export type MatchResult = {
 export type MatchTeamResult = {
   goals: number;
   xG: number;
+  shots: number;
+  shotsOnGoal: number;
+  conversionRate: number;
+  goalMinutes: string[]; // not number because e.g. 45+3' is distinct from 48'
 };
 
 export class Match {
@@ -37,18 +41,47 @@ export class Match {
 
     const alea = new Alea(data.seed);
 
-    const homeXG = alea.normal((data.home.att + data.away.def) / 2, 0.2);
     this.home = {
       ...data.home,
-      xG: homeXG,
-      goals: alea.poisson(homeXG),
+      ...Match.simulateTeam((data.home.att + data.away.def) / 2, alea),
     };
-
-    const awayXG = alea.normal((data.away.att + data.home.def) / 2, 0.2);
     this.away = {
       ...data.away,
-      xG: awayXG,
-      goals: alea.poisson(awayXG),
+      ...Match.simulateTeam((data.away.att + data.home.def) / 2, alea),
+    };
+  }
+
+  static simulateTeam(baseXG: number, alea: Alea) {
+    const xG = alea.normal(baseXG, 0.2);
+    const goals = alea.poisson(xG);
+    const shots = Math.max(goals, alea.poisson(xG * 9.55));
+    const shotsOnGoal = Math.max(goals, alea.poisson(xG * 2.85));
+    const firstHalfAddedTime = alea.normal(3, 1);
+    const secondHalfAddedTime = alea.normal(5, 1.5);
+
+    const goalMinutes = alea
+      .uniqueIntegers(goals, 1, 90 + firstHalfAddedTime + secondHalfAddedTime)
+      .map((minute) => {
+        if (minute <= 45) {
+          return `${minute}’`;
+        } else if (minute <= 45 + firstHalfAddedTime) {
+          return `45+${minute - 45}’`;
+        } else if (minute <= 90) {
+          return `${minute}’`;
+        } else {
+          return `90+${minute - 90}’`;
+        }
+      });
+
+    return {
+      xG,
+      goals,
+      shots,
+      shotsOnGoal,
+      get conversionRate() {
+        return this.shots === 0 ? 0 : this.goals / this.shots;
+      },
+      goalMinutes,
     };
   }
 }

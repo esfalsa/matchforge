@@ -1,32 +1,30 @@
 import type { MetaFunction } from "@remix-run/node";
+import { Link } from "@remix-run/react";
+import { Button } from "~/components/ui/button";
+import { pageTitle } from "~/lib/utils";
 
 export const meta: MetaFunction = () => {
-  return [
-    { title: "New Remix SPA" },
-    { name: "description", content: "Welcome to Remix (SPA Mode)!" },
-  ];
+  return [{ title: pageTitle() }];
 };
 
 export default function Index() {
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <h1>Welcome to Remix (SPA Mode)</h1>
-      <ul>
+    <main className="flex h-full flex-col items-center justify-center">
+      <h1 className="mb-4 text-3xl font-bold">
+        Match<span className="text-green-500">Forge</span>
+      </h1>
+      <ul className="space-y-2">
         <li>
-          <a
-            target="_blank"
-            href="https://remix.run/guides/spa-mode"
-            rel="noreferrer"
-          >
-            SPA Mode Guide
-          </a>
+          <Button className="w-64" asChild>
+            <Link to="/match">Simulate Match</Link>
+          </Button>
         </li>
         <li>
-          <a target="_blank" href="https://remix.run/docs" rel="noreferrer">
-            Remix Docs
-          </a>
+          <Button className="w-64" variant="secondary" asChild>
+            <Link to="/methods">How it Works</Link>
+          </Button>
         </li>
       </ul>
-    </div>
+    </main>
   );
 }

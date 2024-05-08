@@ -1,5 +1,10 @@
-import { Link } from "@remix-run/react";
+import { Link, type MetaFunction } from "@remix-run/react";
 import { TeX as $ } from "~/components/TeX";
+import { pageTitle } from "~/lib/utils";
+
+export const meta: MetaFunction = () => {
+  return [{ title: pageTitle("Methodology") }];
+};
 
 export default function Methods() {
   return (

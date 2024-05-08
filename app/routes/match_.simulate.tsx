@@ -4,6 +4,7 @@ import {
   useRouteError,
   useSearchParams,
   type ClientLoaderFunctionArgs,
+  type MetaFunction,
 } from "@remix-run/react";
 import { z } from "zod";
 import { MatchStats } from "~/components/MatchStats";
@@ -11,6 +12,11 @@ import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "~/components/ui/card";
 import { Match } from "~/lib/match";
 import { randomSeed } from "~/lib/seed";
+import { pageTitle } from "~/lib/utils";
+
+export const meta: MetaFunction = () => {
+  return [{ title: pageTitle("Match Results") }];
+};
 
 export function clientLoader({ request }: ClientLoaderFunctionArgs) {
   const { searchParams } = new URL(request.url);

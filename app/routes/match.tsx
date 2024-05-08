@@ -1,4 +1,4 @@
-import { Form, useSearchParams, useSubmit } from "@remix-run/react";
+import { Form, useSearchParams, useSubmit, type MetaFunction } from "@remix-run/react";
 import {
   Form as FormProvider,
   FormControl,
@@ -14,6 +14,11 @@ import { Input } from "~/components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { randomSeed } from "~/lib/seed";
+import { pageTitle } from "~/lib/utils";
+
+export const meta: MetaFunction = () => {
+  return [{ title: pageTitle("Simulate Match") }];
+};
 
 const FormSchema = z.object({
   home: z.object({

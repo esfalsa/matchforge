@@ -15,10 +15,15 @@ export default function Index() {
       <h1 className="mb-4 text-3xl font-bold">
         Match<span className="text-green-500">Forge</span>
       </h1>
-      <ul>
+      <ul className="space-y-2">
         <li>
           <Button className="w-64" asChild>
             <Link to="/match">Simulate Match</Link>
+          </Button>
+        </li>
+        <li>
+          <Button className="w-64" variant="secondary" asChild>
+            <Link to="/methods">How it Works</Link>
           </Button>
         </li>
       </ul>

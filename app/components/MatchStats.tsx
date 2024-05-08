@@ -1,18 +1,24 @@
 import { type MatchTeamResult, type Match } from "~/lib/match";
 
+type KeysOfType<T, U> = {
+  [K in keyof T]: T[K] extends U ? K : never;
+}[keyof T];
+
+type ValuesOfType<T, U> = T[KeysOfType<T, U>];
+
 export function MatchStats({ match }: { match: Match }) {
   const stats: {
     name: string;
-    key: keyof MatchTeamResult;
-    format?: (x: number) => string;
+    key: KeysOfType<MatchTeamResult, number>;
+    format?: (x: ValuesOfType<MatchTeamResult, number>) => string;
   }[] = [
-    { name: "Expected Goals", key: "xG", format: (x: number) => x.toFixed(2) },
+    { name: "Expected Goals", key: "xG", format: (x) => x.toFixed(2) },
     { name: "Shots", key: "shots" },
     { name: "Shots on Goal", key: "shotsOnGoal" },
     {
       name: "Conversion Rate",
       key: "conversionRate",
-      format: (x: number) => `${(x * 100).toFixed(2)}%`,
+      format: (x) => `${(x * 100).toFixed(2)}%`,
     },
   ];
 
